@@ -1,9 +1,26 @@
 services:
-  - type: static_site
+  - type: web
     name: jetana-beauty-lounge
-    env: static
+    runtime: static
+    repo: https://github.com/YOUR_USERNAME/jetana-beauty-lounge
+    branch: main
     buildCommand: npm install && npm run build
     staticPublishPath: dist
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
     routes:
-      - path: "/*"
+      - type: rewrite
+        source: /*
         destination: /index.html
